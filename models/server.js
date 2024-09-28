@@ -16,9 +16,8 @@ class Server {
 
         this.server = http.createServer(this.app);
         this.io = socket(this.server, {
-            allowRequest: (req, callback) => {
-                const noOriginHeader = req.headers.origin === undefined;
-                callback(null, noOriginHeader); // only allow requests without 'origin' header
+            cors: {
+                origin: "http://127.0.0.1:5500"
             }
         });
 
@@ -28,7 +27,7 @@ class Server {
         this.app.use(express.static(path.resolve(__dirname, '../public')));
         //CORS
 
-        // this.app.use(accesos());
+        this.app.use(accesos());
     }
 
     configurarSockets() {
