@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Chat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</head>
+
+<body class="container">
+    <h1 class="mt-5">MINICHAT</h1>
+    <hr>
+
+    <form id="miFormulario">
+        <div class="row">
+            <div class="col-8">
+
+                <input type="text" id="msg" placeholder="mensaje" class="form-control">
+
+            </div>
+            <div class="col-4">
+                <button class="btn btn-primary">Enviar</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="row mt-2">
+        <div class="col">
+            <ul id="misMensajes">
+
+            </ul>
+        </div>
+    </div>
+
+
+
+
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script>
+        const socket = io('http://localhost:3000');
+
+        //referencias al DOM
+        const formulario=document.getElementById('miFormulario');
+        const mensajes=document.getElementById('misMensajes');
+        const entrada=document.querySelector('#msg');
+
+        formulario.addEventListener('submit', (ev) => {
+            ev.preventDefault();
+
+            const nuevoMensaje=entrada.value;
+
+            console.log(nuevoMensaje);
+
+            socket.emit('mensaje-to-server', {texto:nuevoMensaje })
+        });
+
+        
+        socket.on('mensaje-from-server', (msg) => {
+            console.log('Mensaje:'+JSON.stringify(msg));
+            mensajes.innerHTML+=`<li>${ msg.texto}</li> `;
+        });
+
+        // socket.on('msg-bienvenida', (msg) => {
+        //     console.log('Mensaje:'+msg)
+        // });
+
+        // setTimeout( () => {
+        //     socket.emit('msg-cliente', { msg: 'Hola Mundo', nombre:socket.id });
+        // } , 2000);
+
+    </script>
+
+</body>
+
+</html> 
